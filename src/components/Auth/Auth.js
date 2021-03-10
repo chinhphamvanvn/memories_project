@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from '@material-ui/core';
+import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
+import { GoogleLogin } from 'react-google-login';
 import useStyles from './styles';
 import Input from './Input';
+import Icon from './Icon';
 
 const Auth = () => {
     const classes = useStyles();
@@ -12,16 +14,24 @@ const Auth = () => {
 
     const handleSubmit = () => {
 
-    }
+    };
 
     const handleChange = () => {
 
-    }
+    };
 
     const switchMode = () => {
         setIsSignUp((prevIsSignup) => !prevIsSignup);
         handleShowPassword(true);
-    }
+    };
+
+    const googleSuccess = (res) => {
+        console.log(res);
+    };
+
+    const googleFailure = () => {
+        console.log('Google Sign In was unsuccessful. Try Again Later');
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -44,6 +54,24 @@ const Auth = () => {
                           type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword}/>
                           { isSignup && <Input name="confirmPassword" label="Repeat Password"  handleChange={handleChange} type="password"/>}
                     </Grid>
+                    <GoogleLogin 
+                        clientId="GOOGLE ID"
+                        render={(renderProps) => (
+                            <Button 
+                                className={classes.googleButton} 
+                                color='primary' 
+                                fullWidth 
+                                onClick={renderProps.onClick} 
+                                disabled={renderProps.disabled} 
+                                startIcon={<Icon />} 
+                                variant="contained">
+                                Google Sign In
+                            </Button>
+                        )}
+                        onSuccess={googleSuccess}
+                        onFailure={googleFailure}
+                        cookiePolicy="single_host_origin"
+                    />
                     <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
                         { isSignup ? 'Sign Up' : 'Sign In'}
                     </Button>
